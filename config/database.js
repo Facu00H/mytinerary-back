@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 mongoose.connect(
-    process.env.MONGODB_CONNECTION,
+    process.env.MONGO_URI,
     {
         useUnifiedTopology: true, //habilita a mongoose para controlar la base de datos de mongo
         useNewUrlParser: true, //utiliza el analizador de errores de mongoose en lugar de la de mongo
