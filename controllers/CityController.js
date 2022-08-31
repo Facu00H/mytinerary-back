@@ -13,7 +13,7 @@ const CityController = {
     },
 
     readAll: async (req, res) => {
-        let cities = req.params
+        let cities
         try {
             cities = await City.find();
             res.status(200).json({ message: 'Showing all cities', response: cities, success: true })
@@ -58,7 +58,11 @@ const CityController = {
         const { id } = req.params;
         try {
             let city = await City.findOneAndDelete({ _id:id });
-            res.status(200).json({ message: 'City deleted', response: city, success: true });
+            if (city) {
+                res.status(200).json({ message: 'City deleted', response: city, success: true });
+            } else {
+                res.status(404).json({ message: 'City not found', success: false });
+            }
         } catch (error) {
             console.log(error);
             res.status(400).json({ message: 'Error', success: false });
