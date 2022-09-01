@@ -14,8 +14,18 @@ const CityController = {
 
     readAll: async (req, res) => {
         let cities
+        let query = {}
+
+        if (req.query.country) {
+            query.country = req.query.country
+        }
+
+        if (req.query.city) {
+            query.city = req.query.city
+        }
+
         try {
-            cities = await City.find();
+            cities = await City.find(query);
             res.status(200).json({ message: 'Showing all cities', response: cities, success: true })
         } catch (error) {
             console.log(error);
