@@ -1,7 +1,7 @@
 require('dotenv').config()
 require('./config/database.js');
 var createError = require('http-errors');
-const cors = require()
+const cors = require('cors')
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
