@@ -12,6 +12,16 @@ const itineraryController = {
         }
     },
 
+    readAll: async (req, res) => {
+        try {
+            let itineraries = await Itinerary.find().populate('city').populate('user', { name: 1, lastName: 1, mail: 1, photo: 1, country: 1 })
+            res.status(200).json({ message: 'Itineraries found', response: itineraries, success: true })
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({ message: 'Itineraries not found', success: false })
+        }
+    },
+
     update: async (req, res) => {
         const { name, user, city, price, likes, tags, duration } = req.body
         const { id } = req.params
