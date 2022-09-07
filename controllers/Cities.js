@@ -1,6 +1,6 @@
 const City = require('../models/City');
 
-const CityController = {
+const cityController = {
     create: async (req, res) => {
         const { city, country, photo, population, fundation } = req.body;
         try {
@@ -64,7 +64,7 @@ const CityController = {
         }
     },
 
-    destroy: async (req, res) => {
+    remove: async (req, res) => {
         const { id } = req.params;
         try {
             let city = await City.findOneAndDelete({ _id:id });
@@ -80,4 +80,4 @@ const CityController = {
     }
 }
 
-module.exports = CityController;
+module.exports = cityController;
