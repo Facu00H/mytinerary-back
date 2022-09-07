@@ -11,13 +11,41 @@ const commentsController = {
         }
     },
 
-    readAll: async (req, res) => {
+    readFromItinerary: async (req, res) => {
+        const { id } = req.params
+        let query = {}
+        if (req.query.itinerary) {
+            query.itinerary = req.query.itinerary
+        }
         try {
-            let comments = await Comment.find().populate('itinerary', { name: 1}).populate('user', { name: 1, lastName: 1, mail: 1, photo: 1, country: 1 });
-            res.status(200).json({ message: 'Comments found', response: comments, success: true });
+            let comments = await Comment.find({ itinerary: id }).populate('itinerary', { name: 1 }).populate('user', { name: 1 })
+            if (comments != 0) {
+                res.status(200).json({ message: 'Comments found', response: comments, success: true });
+            } else {
+                res.status(404).json({ message: 'Comments not found', success: false });
+            }
         } catch (error) {
             console.log(error);
-            res.status(400).json({ message: 'Comments not found', success: false });
+            res.status(400).json({ message: 'Error', success: false });
+        }
+    },
+
+    readFromItineraryQuery: async (req, res) => {
+        const { id } = req.params
+        let query = {}
+        if (req.query.itinerary) {
+            query.itinerary = req.query.itinerary
+        }
+        try {
+            let comments = await Comment.find(query).populate('itinerary', { name: 1 }).populate('user', { name: 1 })
+            if (comments != 0) {
+                res.status(200).json({ message: 'Comments found', response: comments, success: true });
+            } else {
+                res.status(404).json({ message: 'Comments not found', success: false });
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({ message: 'Error', success: false });
         }
     }
 }
