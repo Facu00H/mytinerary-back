@@ -14,12 +14,8 @@ const itineraryController = {
 
     readFromCity: async (req, res) => {
         const { id } = req.params
-        let query = {}
-        if (req.query.city) {
-            query.city = req.query.city
-        }
         try {
-            let itineraries = await Itinerary.find({ city:id }).populate('city').populate('user', { name: 1, lastName: 1, mail: 1, photo: 1, country: 1 })
+            let itineraries = await Itinerary.find({ city: id }).populate('city').populate('user', { name: 1, lastName: 1, mail: 1, photo: 1, country: 1 })
 
             if (itineraries != 0) {
                 res.status(200).json({ message: 'Itineraries found', response: itineraries, success: true })
@@ -33,7 +29,6 @@ const itineraryController = {
     },
 
     readFromCityQuery: async (req, res) => {
-        const { id } = req.params
         let query = {}
         if (req.query.city) {
             query.city = req.query.city
@@ -54,10 +49,6 @@ const itineraryController = {
 
     readFromUser: async (req, res) => {
         const { id } = req.params
-        let query = {}
-        if (req.query.user) {
-            query.user = req.query.user
-        }
         try {
             let itineraries = await Itinerary.find({ user: id }).populate('city').populate('user', { name: 1, lastName: 1, mail: 1, photo: 1, country: 1 })
             if (itineraries) {
@@ -70,9 +61,8 @@ const itineraryController = {
             res.status(400).json({ message: 'Error', success: false })
         }
     },
-    
+
     readFromUserQuery: async (req, res) => {
-        const { id } = req.params
         let query = {}
         if (req.query.user) {
             query.user = req.query.user
