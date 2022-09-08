@@ -13,12 +13,8 @@ const commentsController = {
 
     readFromItinerary: async (req, res) => {
         const { id } = req.params
-        let query = {}
-        if (req.query.itinerary) {
-            query.itinerary = req.query.itinerary
-        }
         try {
-            let comments = await Comment.find({ itinerary: id }).populate('itinerary', { name: 1 }).populate('user', { name: 1 })
+            let comments = await Comment.find({ itinerary: id }).populate('itinerary', { name: 1 }).populate('user', { name: 1, photo: 1 })
             if (comments != 0) {
                 res.status(200).json({ message: 'Comments found', response: comments, success: true });
             } else {
@@ -31,13 +27,12 @@ const commentsController = {
     },
 
     readFromItineraryQuery: async (req, res) => {
-        const { id } = req.params
         let query = {}
         if (req.query.itinerary) {
             query.itinerary = req.query.itinerary
         }
         try {
-            let comments = await Comment.find(query).populate('itinerary', { name: 1 }).populate('user', { name: 1 })
+            let comments = await Comment.find(query).populate('itinerary', { name: 1 }).populate('user', { name: 1, photo: 1 })
             if (comments != 0) {
                 res.status(200).json({ message: 'Comments found', response: comments, success: true });
             } else {
