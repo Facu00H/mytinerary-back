@@ -4,8 +4,8 @@ const cityController = {
     create: async (req, res) => {
         const { city, country, photo, population, fundation } = req.body;
         try {
-            await new City(req.body).save() //req.body tiene que tener todas las variables antes descritas
-            res.status(201).json({ message: 'City created', succsess: true });
+            let city = await new City(req.body).save() //req.body tiene que tener todas las variables antes descritas
+            res.status(201).json({ message: 'City created', succsess: true, id: city._id });
         } catch (error) {
             console.log(error);
             res.status(400).json({ message: 'City not created', success: false });
