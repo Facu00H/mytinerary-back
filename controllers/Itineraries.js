@@ -5,7 +5,7 @@ const itineraryController = {
         const { name, user, city, price, likes, tags, duration } = req.body
         try {
             let itinerary = await new Itinerary(req.body).save()
-            res.status(201).json({ message: 'Itinerary created', response: itinerary, success: true })
+            res.status(201).json({ message: 'Itinerary created', response: itinerary, success: true, id: itinerary._id })
         } catch (error) {
             console.log(error);
             res.status(400).json({ message: 'Itinerary not created', success: false })
