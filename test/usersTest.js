@@ -3,17 +3,19 @@ const app = require('../app')
 const {assert} = require('chai')
 
 
-describe('POST /cities', function(){
+describe('POST /auth', function(){
   it('Must response with 201 status code', function(done){
     request(app)
-      .post('/auth')
+      .post('/auth/signup')
       .send({
-        name: 'asd',
-        lastName: 'dsa',
-        mail: 'asdfasdfas',
-        password: 'asdfasdf',
-        photo: 'asdf',
-        country: 'asdf',
+        "name": "Facundo",
+        "lastName": "Hernando",
+        "mail": "faisheerrr00@gmail.com",
+        "country": "Argentina",
+        "photo": "asdf.jpg",
+        "from": "form",
+        "role": "admin",
+        "password": "facundo1234"
       })
       .expect(201)
       .end(function(err,res){
@@ -22,31 +24,5 @@ describe('POST /cities', function(){
       })
   })
 
-  it('Must response with 201 status code', function(done){
-    request(app)
-      .post('/auth')
-      .send({
-        name: 'asd',
-        lastName: 'dsa',
-        mail: 'asdfasdfas',
-        password: 'asdfasdf',
-        photo: 'asdf',
-        country: 'asdf',
-      })
-      .then(response => {
-        assert.isString(response.body.id)
-        done()
-      })
-  })
-
-  it('Must response with 201 status code', function(done){
-    request(app)
-      .post('/auth')
-      .send({})
-      .expect(400)
-      .end(function(err,res){
-        if(err) return done(err);
-        return done()
-      })
-  })
+  // Posible test: Cuando se cree un usuario con google retornar verificar si retorna true el verified.
 })
