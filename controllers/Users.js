@@ -73,9 +73,117 @@ const usersController = {
 
     verifyMail: async (req, res) => {},
 
-    signIn: async (req, res) => {},
+    signIn: async(req,res) => {
+        let {
+            email,
+            password, //el rol tiene que venir desde el frontend para usar este metodo para ambos casos (user y admin)
+            from //el from tiene que venir desde el frontend para avisarle al método desde donde se crea el usuario
+        } = req.body
 
-    signOut: async (req, res) => {},  // findOneAndUpdate y cambiar logged de true a false
+        try{
+            let user = await User.findOne({email})
+            if(!user){
+                res.status(404).json({
+                    message: 'user not exist,please sing up',
+                    succes:false
+                })
+            }else if(user.verified){
+                let checkPass = user.pass.filter(passwordElem => bcryptjs.compareSync(password,passwordElem))
+
+                if(from === 'form'){
+                    if(checkPass.length > 0){
+                        let loginUser={
+                            id:user._id,
+                            name:user.name,
+                            mail:user.email,
+                            role:user.role,
+                            photo:user.photo,
+                        }
+
+                        user.logged = true
+                        await user.save()
+                        res.status(200).json({
+                            succes:true,
+                            response:{user:loginUser},
+                            message:'welcome ' + user.name,
+                        })
+
+                    }else{
+                        res.status(400).json({
+                            succes:false,
+                            message:'user name or password incorrect'
+                        })
+
+                    }
+
+                }else{
+                    if(checkPass.length > 0){
+                        let loginUser={
+                            id:user._id,
+                            name:user.name,
+                            mail:user.email,
+                            role:user.role,
+                            photo:user.photo,
+                        }
+
+                        user.logged = true
+                        await user.save()
+                        res.status(200).json({
+                            succes:true,
+                            response:{user:loginUser},
+                            message:'welcome ' + user.name,
+                        })
+
+                    }else{
+                        res.status(400).json({
+                            succes:false,
+                            message:'Invalid Credentials'
+                        })
+
+                    }
+                }
+
+
+            }else{
+                res.status(401).json({
+                    succes:false,
+                    message:'please verify your email account and try again'
+                })
+            }
+
+        }catch(err){
+            console.log(err)
+            res.status(400).json({
+                succes:false,
+                message:'sign in error try again later'
+            })
+        }
+    },
+
+    signOut: async(req,res) => {
+        let {email}=req.body
+        try{
+            let user = await user.findOneAndUpdate({email:email},req.body)
+            if(user){
+                user.logged=false
+                await user.save()
+                res.status(200).json({
+                    succes:true,
+                    message:'user signOut'
+                })
+            }else{
+                res.status(404).json({
+                    succes:false,
+                    message : 'user not finded'
+                })
+            }
+        }catch(err){
+            res.status(400).json({
+                succes:false,
+                message:'happend a error with signout'
+            })
+        }
+    }  // findOneAndUpdate y cambiar logged de true a false
 
 }
 
