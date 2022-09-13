@@ -40,6 +40,7 @@ const sendMail = async (mail, code) => {
     html: `
         <div>
           ${mail}
+          <a href='http://localhost:4000/auth/verify/${code}'>verify here</a>
         </div>
     `
   }
