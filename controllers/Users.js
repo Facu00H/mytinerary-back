@@ -71,7 +71,26 @@ const usersController = {
         }
     },
 
-    verifyMail: async (req, res) => {},
+    verifyMail: async (req, res) => {
+        const {code} = req.params;
+
+        try{
+            let user = await User.findOne({code});
+            if(user){
+                user.verified = true;
+                await user.save();
+                res.redirect('https://www.google.com')
+            }else{
+                res.status(404).json({ message: "email has not accounted yet"})
+            }
+        }catch{
+            console.log(error)
+            res.status(400).json({ 
+                message: "error",
+                succes: false
+            })
+        }
+    },
 
     signIn: async(req,res) => {
         let {
