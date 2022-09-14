@@ -26,7 +26,7 @@ const usersController = {
                     .toString('hex') 
                 if (from==='form') {
                     password = bcryptjs.hashSync(password,10) 
-                    user = await new User({name,lastName,country,photo,mail,password:[password],role,from:[from],logged,verified,code}).save() 
+                    user = await new User({name,lastName,photo,mail,password:[password],role,from:[from],logged,verified,code}).save() 
 
                     sendMail(mail,code)
                     res.status(201).json({
