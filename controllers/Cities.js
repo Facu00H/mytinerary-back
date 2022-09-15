@@ -1,14 +1,25 @@
 const City = require('../models/City');
+const Joi = require('joi')
+
+const citiesValidation = Joi.object({
+    city: Joi.string().min(3).max(15).required(),
+    country: Joi.string().min(3).max(20).required(),
+    photo: Joi.string().uri().required(),
+    population: Joi.number().integer().min(1000).required(),
+    fundation: Joi.number()
+})
+
 
 const cityController = {
     create: async (req, res) => {
         const { city, country, photo, population, fundation } = req.body;
         try {
+            let value = await citiesValidation.validateAsync(req.body)
             let city = await new City(req.body).save() //req.body tiene que tener todas las variables antes descritas
             res.status(201).json({ message: 'City created', succsess: true, id: city._id });
         } catch (error) {
             console.log(error);
-            res.status(400).json({ message: 'City not created', success: false });
+            res.status(400).json({ message: error.message, success: false });
         }
     },
 
@@ -36,7 +47,7 @@ const cityController = {
     read: async (req, res) => {
         const { id } = req.params;
         try {
-            let city = await City.findOne({ _id:id });
+            let city = await City.findOne({ _id: id });
             if (city) {
                 res.status(200).json({ message: 'City found', response: city, success: true });
             } else {
@@ -52,7 +63,7 @@ const cityController = {
         const { id } = req.params;
         const { city, country, photo, population, fundation } = req.body;
         try {
-            let city = await City.findByIdAndUpdate({ _id:id }, req.body );
+            let city = await City.findByIdAndUpdate({ _id: id }, req.body);
             if (city) {
                 res.status(200).json({ message: 'City updated', response: city, success: true });
             } else {
@@ -67,7 +78,7 @@ const cityController = {
     remove: async (req, res) => {
         const { id } = req.params;
         try {
-            let city = await City.findOneAndDelete({ _id:id });
+            let city = await City.findOneAndDelete({ _id: id });
             if (city) {
                 res.status(200).json({ message: 'City deleted', response: city, success: true });
             } else {

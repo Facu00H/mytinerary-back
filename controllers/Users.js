@@ -2,6 +2,18 @@ const User = require('../models/User')
 const crypto = require('crypto') //recurso propio de nodeJS para generar códigos aleatorios y unicos
 const bcryptjs = require('bcryptjs') //recurso propio de nodeJS para hashear contraseñas
 const sendMail = require('./sendMail')
+const Joi = require('joi')
+
+const usersValidation = Joi.object({
+    name: Joi.string().min(3).max(15).required(),
+    lastName: Joi.string().min(3).max(15).required(),
+    country: Joi.string().min(3).max(20),
+    photo: Joi.string().uri().required(),
+    mail: Joi.string().email().required(),
+    password: Joi.string().min(8).max(20).required(),
+    role: Joi.string().valid('admin', 'user').required(),
+    from: Joi.string().valid('form', 'google').required(),
+})
 
 const usersController = {
     
@@ -26,6 +38,7 @@ const usersController = {
                     .toString('hex') 
                 if (from==='form') {
                     password = bcryptjs.hashSync(password,10) 
+                    let value = await usersValidation.validateAsync(req.body)
                     user = await new User({name,lastName,photo,mail,password:[password],role,from:[from],logged,verified,code}).save() 
 
                     sendMail(mail,code)
@@ -65,7 +78,7 @@ const usersController = {
         } catch(error) {
             console.log(error)
             res.status(400).json({
-                message: "could't signed up",
+                message: error.message,
                 success: false
             })
         }
