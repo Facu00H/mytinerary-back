@@ -107,27 +107,26 @@ const usersController = {
 
     signIn: async(req,res) => {
         let {
-            email,
+            mail,
             password, //el rol tiene que venir desde el frontend para usar este metodo para ambos casos (user y admin)
             from //el from tiene que venir desde el frontend para avisarle al método desde donde se crea el usuario
         } = req.body
 
         try{
-            let user = await User.findOne({email})
+            let user = await User.findOne({mail})
             if(!user){
                 res.status(404).json({
                     message: 'user not exist,please sing up',
                     succes:false
                 })
             }else if(user.verified){
-                let checkPass = user.pass.filter(passwordElem => bcryptjs.compareSync(password,passwordElem))
-
+                let checkPass = user.password.filter(passwordElem => bcryptjs.compareSync(password,passwordElem))
                 if(from === 'form'){
                     if(checkPass.length > 0){
                         let loginUser={
                             id:user._id,
                             name:user.name,
-                            mail:user.email,
+                            mail:user.mail,
                             role:user.role,
                             photo:user.photo,
                         }
@@ -153,7 +152,7 @@ const usersController = {
                         let loginUser={
                             id:user._id,
                             name:user.name,
-                            mail:user.email,
+                            mail:user.mail,
                             role:user.role,
                             photo:user.photo,
                         }
@@ -193,15 +192,15 @@ const usersController = {
     },
 
     signOut: async(req,res) => {
-        let {email}=req.body
+        let {mail}=req.body
         try{
-            let user = await user.findOneAndUpdate({email:email},req.body)
+            const user = await User.findOne({mail: mail})
             if(user){
                 user.logged=false
                 await user.save()
                 res.status(200).json({
                     succes:true,
-                    message:'user signOut'
+                    message:'user signOut',
                 })
             }else{
                 res.status(404).json({
@@ -214,6 +213,7 @@ const usersController = {
                 succes:false,
                 message:'happend a error with signout'
             })
+            console.log(err)
         }
     }  // findOneAndUpdate y cambiar logged de true a false
 
