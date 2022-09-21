@@ -123,6 +123,33 @@ const itineraryController = {
             console.log(error);
             res.status(400).json({ message: 'Itinerary not deleted', success: false })
         }
+    },
+
+    likeDislike: async (req, res) => {
+        //desestructuro de la request el objeto user de passport
+        const { id } = req.user
+        //desestructuro de la request el id del itinerario
+        const { itineraryId } = req.params
+        try {
+            //busco el itinerario
+            let itinerary = await Itinerary.findById({ _id: itineraryId })
+            //busco el usuario en el array de likes del itinerario
+            let user = itinerary.likes.find(user => user == id)
+            //si el usuario ya esta en el array de likes, lo saco
+            if (user) {
+                itinerary.likes = itinerary.likes.pull(id)
+                await itinerary.save()
+                res.status(200).json({ message: 'Itinerary disliked', response: itinerary, success: true })
+            } else {
+                //si el usuario no esta en el array de likes, lo agrego
+                itinerary.likes.push(id)
+                await itinerary.save()
+                res.status(200).json({ message: 'Itinerary liked', response: itinerary, success: true })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({ message: 'Error', success: false })
+        }
     }
 }
 
