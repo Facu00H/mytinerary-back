@@ -4,5 +4,5 @@ const { create, readFromItinerary, readFromItineraryQuery } = require('../contro
 
 router.post('/', create); //cuando haga un post a /, ejecuta el metodo create del controller
 router.get('/query', readFromItineraryQuery);
-router.get('/itinerary/:id', readFromItinerary);
+router.get('/:id', readFromItinerary);
 module.exports = router;
