@@ -18,9 +18,9 @@ passport.use(
                 const user = await User.findById(jwt_payload.id);
                 if (user) {
                     user = {
-                        id: user._id,
+                        ide: user._id,
                         name: user.name,
-                        email: user.email,
+                        email: user.mail,
                         role: user.role,
                         photo: user.photo,
                     }

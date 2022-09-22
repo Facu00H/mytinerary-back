@@ -1,10 +1,26 @@
 const Comment = require('../models/Comment');
+const Joi = require('joi')
+
+const commentsValidation = Joi.object({
+    comment: Joi.string().min(3).max(100).required(),
+    itinerary: Joi.string(),
+    user: Joi.string(),
+})
+
+
+
+
+
+
+
 
 const commentsController = {
     create: async (req, res) => {
+        let {user} = req.user
         try {
-            await Comment.create(req.body);
-            res.status(201).json({ message: 'Comment created', success: true });
+            await commentsValidation.validateAsync(req.body)
+           let comment = await new Comment(req.body).save();
+            res.status(201).json({ message: 'Comment created', success: true,response:comment });
         } catch (error) {
             console.log(error);
             res.status(400).json({ message: 'Comment not created', success: false });
@@ -42,6 +58,62 @@ const commentsController = {
             console.log(error);
             res.status(400).json({ message: 'Error', success: false });
         }
+    },
+
+
+    updateComment:async (req,res)=>{
+        let {id}=req.params
+        let {user} = req.user
+        try{
+            let comment = await Comment.findByIdAndUpdate({_id:id}, req.body,{new:true})
+            if(comment){
+                res.status(200).json({
+                    message:'comment updated',
+                    success:true,
+                    response:comment
+                })
+            }else{
+                res.status(404).json({
+                    message:'comment not finded',
+                    success:false,
+                })
+            }
+
+        }catch(err){
+            console.log(err)
+            res.status(400).json({
+                message:'comment failed',
+                success:false
+            })
+
+        }
+    },
+
+    removeComment:async(req,res)=>{
+       let {id}=req.params
+       let {user} = req.user
+        try{
+        let comment = await Comment.findByIdAndDelete({_id:id})
+            if(comment){
+                res.status(200).json({
+                    message:'comment deleted',
+                    success:true,
+                    response:comment
+                })
+            }else{
+                res.status(404).json({
+                    message:'comment not finded',
+                    success:false
+                })
+            }
+        }catch(err){
+            res.status(400).json({
+                message:'comment failed',
+                success: false
+            })
+
+        }
+
     }
 }
 
