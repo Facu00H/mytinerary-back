@@ -132,15 +132,24 @@ const usersController = {
                             role: user.role,
                             photo: user.photo,
                         }
-                        // const token = jwt.sign({ id: user._id }, process.env.KEY_JWT, { expiresIn: 60 * 60 * 24 })
+                        const token = jwt.sign(
+                            {
+                                id: user._id,
+                                role: user.role
+                            },
+                            process.env.KEY_JWT,
+                            {expiresIn: 60*60*24}
+                            )
                         user.logged = true
                         await user.save()
                         res.status(200).json({
                             succes: true,
-                            response: { user: loginUser },
+                            response: { 
+                                user: loginUser,
+                                token: token,
+                            },
                             message: 'welcome ' + user.name,
                         })
-
                     } else {
                         res.status(400).json({
                             succes: false,
@@ -159,11 +168,22 @@ const usersController = {
                             photo: user.photo,
                         }
 
+                        const token = jwt.sign(
+                            {
+                                id: user._id,
+                                role: user.role
+                            },
+                            process.env.KEY_JWT,
+                            {expiresIn: 60*60*24}
+                            )
                         user.logged = true
                         await user.save()
                         res.status(200).json({
                             succes: true,
-                            response: { user: loginUser },
+                            response: { 
+                                user: loginUser,
+                                token: token,
+                            },
                             message: 'welcome ' + user.name,
                         })
 
