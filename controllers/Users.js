@@ -18,6 +18,34 @@ const usersValidation = Joi.object({
 })
 
 const usersController = {
+    read: async(req,res)=>{
+             try{
+                 let oneUser = await  User.find()
+                 if(oneUser){
+                     res.status(200).json({
+                            messaje: " user found",
+                         response: oneUser,
+                         success:true
+                     })
+        
+                 }else{
+                     res.status(404).json({
+                            messaje : "user not found",
+                         success:false
+                     })
+                 }
+        
+             }catch(error){
+                 console.log(error)
+                 res.status(400).json({
+                     messaje:error,
+                     success:false
+                 })
+             }
+        
+         },
+
+
 
     signUp: async (req, res) => {
         let {
