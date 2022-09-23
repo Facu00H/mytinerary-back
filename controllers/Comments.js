@@ -42,6 +42,61 @@ const commentsController = {
             console.log(error);
             res.status(400).json({ message: 'Error', success: false });
         }
+    },
+
+    updateComment: async (req, res) => {
+        let { id } = req.params
+        let { user } = req.user
+        try {
+            let comment = await Comment.findOneAndUpdate({ _id: id }, req.body, { new: true })
+            if (comment) {
+                res.status(200).json({
+                    message: 'comment updated',
+                    success: true,
+                    response: comment
+                })
+            } else {
+                res.status(404).json({
+                    message: 'comment not finded',
+                    success: false,
+                })
+            }
+
+        } catch (err) {
+            console.log(err)
+            res.status(400).json({
+                message: 'comment failed',
+                success: false
+            })
+
+        }
+    },
+
+    removeComment: async (req, res) => {
+        let { id } = req.params
+        let { user } = req.user
+        try {
+            let comment = await Comment.findByIdAndDelete({ _id: id })
+            if (comment) {
+                res.status(200).json({
+                    message: 'comment deleted',
+                    success: true,
+                    response: comment
+                })
+            } else {
+                res.status(404).json({
+                    message: 'comment not finded',
+                    success: false
+                })
+            }
+        } catch (err) {
+            res.status(400).json({
+                message: 'comment failed',
+                success: false
+            })
+
+        }
+
     }
 }
 
