@@ -135,7 +135,6 @@ const usersController = {
                         const token = jwt.sign(
                             {
                                 id: user._id,
-                                role: user.role
                             },
                             process.env.KEY_JWT,
                             {expiresIn: 60*60*24}
@@ -171,7 +170,6 @@ const usersController = {
                         const token = jwt.sign(
                             {
                                 id: user._id,
-                                role: user.role
                             },
                             process.env.KEY_JWT,
                             {expiresIn: 60*60*24}
