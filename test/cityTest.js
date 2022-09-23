@@ -10,7 +10,7 @@ describe('POST /cities', function(){
       .send({
         city: 'aaa',
         country: 'aaa',
-        photo: 'aaa',
+        photo: 'https://static.eldiario.es/clip/71d118ff-5ef2-449c-be8a-6c321304fa70_16-9-aspect-ratio_default_0.jpg',
         population: 1123123,
         fundation: 1123123,
       })
@@ -27,7 +27,7 @@ describe('POST /cities', function(){
       .send({
         city: 'aaa',
         country: 'aaa',
-        photo: 'aaa',
+        photo: 'https://static.eldiario.es/clip/71d118ff-5ef2-449c-be8a-6c321304fa70_16-9-aspect-ratio_default_0.jpg',
         population: 1123123,
         fundation: 1123123,
       })

@@ -12,7 +12,7 @@ describe('POST /auth', function(){
         "lastName": "Hernando",
         "mail": "faisheerrr00@gmail.com",
         "country": "Argentina",
-        "photo": "asdf.jpg",
+        "photo": "https://cloudfront-us-east-1.images.arcpublishing.com/infobae/UFHSEUXLWNA7BCHNHYTVUU6TWQ.jpg",
         "from": "form",
         "role": "admin",
         "password": "facundo1234"
