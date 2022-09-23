@@ -135,7 +135,10 @@ const usersController = {
                         const token = jwt.sign(
                             {
                                 id: user._id,
-                                role: user.role
+                                role: user.role,
+                                mail: user.mail,
+                                photo: user.photo,
+                                name: user.name,
                             },
                             process.env.KEY_JWT,
                             {expiresIn: 60*60*24}
@@ -171,7 +174,10 @@ const usersController = {
                         const token = jwt.sign(
                             {
                                 id: user._id,
-                                role: user.role
+                                role: user.role,
+                                mail: user.mail,
+                                photo: user.photo,
+                                name: user.name,
                             },
                             process.env.KEY_JWT,
                             {expiresIn: 60*60*24}
@@ -237,7 +243,30 @@ const usersController = {
             })
             console.log(err)
         }
-    }  // findOneAndUpdate y cambiar logged de true a false
+    }, // findOneAndUpdate y cambiar logged de true a false
+
+    verifyToken: (req, res) => {
+        if (req.user !== null){
+            res.status(200).json({
+                success:true,
+                response:{
+                    user: {
+                        id: req.user.userId,
+                        name: req.user.name,
+                        email: req.user.email,
+                        role: req.user.role,
+                        photo:req.user.photo
+                    }
+                },
+                message: 'Welcome' + req.user.name+'!'
+            })
+        }else {
+            res.json({
+                success:false,
+                message: "Sign in please!"
+            })
+        }
+    }
 
 }
 
