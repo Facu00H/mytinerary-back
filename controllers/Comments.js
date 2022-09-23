@@ -1,10 +1,26 @@
 const Comment = require('../models/Comment');
+const Joi = require('joi')
+
+const commentsValidation = Joi.object({
+    comment: Joi.string().min(3).max(100).required(),
+    itinerary: Joi.string(),
+    user: Joi.string(),
+})
+
+
+
+
+
+
+
 
 const commentsController = {
     create: async (req, res) => {
+        let {user} = req.user
         try {
-            await Comment.create(req.body);
-            res.status(201).json({ message: 'Comment created', success: true });
+            await commentsValidation.validateAsync(req.body)
+           let comment = await new Comment(req.body).save();
+            res.status(201).json({ message: 'Comment created', success: true,response:comment });
         } catch (error) {
             console.log(error);
             res.status(400).json({ message: 'Comment not created', success: false });
@@ -57,7 +73,7 @@ const commentsController = {
                 })
             } else {
                 res.status(404).json({
-                    message: 'comment not finded',
+                    message: 'comment not found',
                     success: false,
                 })
             }
@@ -68,7 +84,6 @@ const commentsController = {
                 message: 'comment failed',
                 success: false
             })
-
         }
     },
 
@@ -85,7 +100,7 @@ const commentsController = {
                 })
             } else {
                 res.status(404).json({
-                    message: 'comment not finded',
+                    message: 'comment not found',
                     success: false
                 })
             }
@@ -94,9 +109,7 @@ const commentsController = {
                 message: 'comment failed',
                 success: false
             })
-
         }
-
     }
 }
 
