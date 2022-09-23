@@ -15,10 +15,10 @@ passport.use(
         // los datos del payload hay que enviarselos al controlador para que los pueda utilizar
         async (jwt_payload, done) => { // maneja como llega el dato decodificado al controlador
             try {
-                const user = await User.findById(jwt_payload.id);
+                let user = await User.findOne({ _id: jwt_payload.id });
                 if (user) {
                     user = {
-                        ide: user._id,
+                        id: user._id,
                         name: user.name,
                         email: user.mail,
                         role: user.role,
