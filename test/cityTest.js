@@ -49,3 +49,14 @@ describe('POST /cities', function(){
   })
 })
 
+ describe("GET /cities", () => {
+     it("Must respond with 200 status code", function (done) {
+         request(app)
+             .get("/cities")
+             .expect(200)
+             .end((err, res) => {
+                 if (err) return done(err)
+                 return done()
+             })
+     })
+ })
