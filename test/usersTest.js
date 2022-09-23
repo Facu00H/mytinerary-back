@@ -26,3 +26,15 @@ describe('POST /auth', function(){
 
   // Posible test: Cuando se cree un usuario con google retornar verificar si retorna true el verified.
 })
+
+ describe("GET /auth", () => {
+     it("Must respond with 200 status code", function (done) {
+         request(app)
+             .get("/auth")
+             .expect(200)
+             .end((err, res) => {
+                 if (err) return done(err)
+                 return done()
+             })
+     })
+ })
