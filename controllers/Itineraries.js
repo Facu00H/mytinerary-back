@@ -5,16 +5,16 @@ const itinerariesValidation = Joi.object({
     name: Joi.string().min(3).max(100).required(),
     user: Joi.string(),
     city: Joi.string(),
+    likes: Joi.number(),
     photo: Joi.string().uri().required(),
     price: Joi.number().required(),
-    likes: Joi.number().integer().required(),
     tags: Joi.string().required(),
     duration: Joi.number().integer().required(),
 })
 
 const itineraryController = {
     create: async (req, res) => {
-        const { name, user, city, photo, price, likes, tags, duration } = req.body
+        const { name, user, city, photo, price, tags, duration } = req.body
         try {
             let value = await itinerariesValidation.validateAsync(req.body)
             let itinerary = await new Itinerary(req.body).save()
