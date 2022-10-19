@@ -28,7 +28,7 @@ const itineraryController = {
     readFromCity: async (req, res) => {
         const { id } = req.params
         try {
-            let itineraries = await Itinerary.find({ city: id }).populate('city').populate('users', { name: 1, lastName: 1, mail: 1, photo: 1, country: 1 })
+            let itineraries = await Itinerary.find({ city: id }).populate('city').populate('user', { name: 1, lastName: 1, mail: 1, photo: 1, country: 1 })
 
             if (itineraries != 0) {
                 res.status(200).json({ message: 'Itineraries found', response: itineraries, success: true })
