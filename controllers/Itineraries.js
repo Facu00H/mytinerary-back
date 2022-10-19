@@ -47,7 +47,7 @@ const itineraryController = {
             query.city = req.query.city
         }
         try {
-            let itineraries = await Itinerary.find(query).populate('city').populate('user', { name: 1, lastName: 1, mail: 1, photo: 1, country: 1 })
+            let itineraries = await Itinerary.find({_id: query}).populate('city').populate('user', { name: 1, lastName: 1, mail: 1, photo: 1, country: 1 })
 
             if (itineraries != 0) {
                 res.status(200).json({ message: 'Itineraries found', response: itineraries, success: true })
