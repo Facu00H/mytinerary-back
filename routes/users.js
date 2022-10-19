@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { create, readAll } = require('../controllers/Users'); //traigo los metodos del controller
+const { signUp, signIn, signOut, verifyMail, verifyToken } = require('../controllers/Users'); //traigo los metodos del controller
+const passport = require('../config/passport');
 
-router.post('/', create); //cuando haga un post a /, ejecuta el metodo create del controller
-router.get('/', readAll);
+router.post('/signup', signUp);
+router.get('/token', passport.authenticate('jwt', {session:false}), verifyToken)
+router.get('/verify/:code',verifyMail)
+router.post('/signin', signIn);
+router.post('/signout', signOut);
 module.exports = router;

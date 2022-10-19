@@ -1,21 +1,34 @@
 const Itinerary = require('../models/Itinerary')
+const Joi = require('joi')
+
+const itinerariesValidation = Joi.object({
+    name: Joi.string().min(3).max(100).required(),
+    user: Joi.string(),
+    city: Joi.string(),
+    likes: Joi.number(),
+    photo: Joi.string().uri().required(),
+    price: Joi.number().required(),
+    tags: Joi.string().required(),
+    duration: Joi.number().integer().required(),
+})
 
 const itineraryController = {
     create: async (req, res) => {
-        const { name, user, city, price, likes, tags, duration } = req.body
+        const { name, user, city, photo, price, tags, duration } = req.body
         try {
+            let value = await itinerariesValidation.validateAsync(req.body)
             let itinerary = await new Itinerary(req.body).save()
-            res.status(201).json({ message: 'Itinerary created', response: itinerary, success: true })
+            res.status(201).json({ message: 'Itinerary created', response: itinerary, success: true, id: itinerary._id })
         } catch (error) {
             console.log(error);
-            res.status(400).json({ message: 'Itinerary not created', success: false })
+            res.status(400).json({ message: error.message, success: false })
         }
     },
 
     readFromCity: async (req, res) => {
         const { id } = req.params
         try {
-            let itineraries = await Itinerary.find({ city: id }).populate('city').populate('user', { name: 1, lastName: 1, mail: 1, photo: 1, country: 1 })
+            let itineraries = await Itinerary.find({ city: id }).populate('city').populate('users', { name: 1, lastName: 1, mail: 1, photo: 1, country: 1 })
 
             if (itineraries != 0) {
                 res.status(200).json({ message: 'Itineraries found', response: itineraries, success: true })
@@ -109,6 +122,24 @@ const itineraryController = {
         } catch (error) {
             console.log(error);
             res.status(400).json({ message: 'Itinerary not deleted', success: false })
+        }
+    },
+
+    like: async (req, res) => {
+        const { id } = req.params
+        const userId = req.user.id
+        try {
+            let itinerary = await Itinerary.findOne({ _id: id })
+            if (itinerary.likes.includes(userId)) {
+                await Itinerary.findOneAndUpdate({ _id: id }, { $pull: { likes: userId } }, { new: true })
+                res.status(200).json({ message: 'Itinerary unliked', success: true })
+            } else {
+                await Itinerary.findOneAndUpdate({ _id: id }, { $push: { likes: userId } }, { new: true })
+                res.status(200).json({ message: 'Itinerary liked', success: true })
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({ message: 'Error', success: false })
         }
     }
 }
