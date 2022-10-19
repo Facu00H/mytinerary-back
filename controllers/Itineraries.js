@@ -21,7 +21,7 @@ const itineraryController = {
             res.status(201).json({ message: 'Itinerary created', response: itinerary, success: true, id: itinerary._id })
         } catch (error) {
             console.log(error);
-            res.status(400).json({ message: error.message, success: false })
+            res.status(400).json({ message: error, success: false })
         }
     },
 
