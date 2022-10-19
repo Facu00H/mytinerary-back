@@ -37,7 +37,7 @@ const itineraryController = {
             }
         } catch (error) {
             console.log(error);
-            res.status(400).json({ message: 'Error', success: false })
+            res.status(400).json({ message: error, success: false })
         }
     },
 
@@ -71,7 +71,7 @@ const itineraryController = {
             }
         } catch (error) {
             console.log(error);
-            res.status(400).json({ message: 'Error', success: false })
+            res.status(400).json({ message: error, success: false })
         }
     },
 
@@ -89,7 +89,7 @@ const itineraryController = {
             }
         } catch (error) {
             console.log(error);
-            res.status(400).json({ message: 'Error', success: false })
+            res.status(400).json({ message: error, success: false })
         }
     },
 
@@ -139,7 +139,7 @@ const itineraryController = {
             }
         } catch (error) {
             console.log(error)
-            res.status(400).json({ message: 'Error', success: false })
+            res.status(400).json({ message: error, success: false })
         }
     }
 }
